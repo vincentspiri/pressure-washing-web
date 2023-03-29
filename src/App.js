@@ -28,66 +28,14 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 function App() {
   const [nav, setNav] = useState(false);
-  const [formFirstName, setFormFirstName] = useState(null);
-  const [formLastName, setFormLastName] = useState(null);
-  const [formPhone, setFormPhone] = useState(null);
-  const [formMessage, setFormMessage] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [webAd, setWebAd] = useState(true);
   const parallax = useRef(null);
-
-  function setFirst(event) {
-    setFormFirstName(event.target.value);
-  }
-  function setLast(event) {
-    setFormLastName(event.target.value);
-  }
-  function setPhone(event) {
-    setFormPhone(event.target.value);
-  }
-
-  async function createClient(first, last, phone) {
-    try {
-      const docRef = await addDoc(collection(db, "clients"), {
-        first: first,
-        last: last,
-        phone: phone
-      });
-      console.log(`Document writtten with ID: ${docRef.id}`);
-      setShowSuccessModal(true);
-      setTimeout(() => setShowSuccessModal(false), 5000);
-      sendMessage("6086159052", `You got a new client! First: ${first}, Last: ${last}, Phone: ${phone}, Message: ${formMessage}`);
-    } catch (e) {
-      console.error(`Error adding document: ${e}`);
-      setShowErrorModal(true);
-      setTimeout(() => setShowErrorModal(false), 5000);
-    }
-  }
-
-  const sendMessage = (phoneNumber, message) => {
-    const formData = new FormData();
-    formData.append("To", `+1${phoneNumber}`);
-    formData.append("From", process.env.REACT_APP_TWILIO_PHONE);
-    formData.append("Body", message);
-
-    axios.post(`https://api.twilio.com/2010-04-01/Accounts/${process.env.REACT_APP_TWILIO_SID}/Messages.json`,
-      formData,
-      {
-        auth: {
-          username: process.env.REACT_APP_TWILIO_SID,
-          password: process.env.REACT_APP_TWILIO_TOKEN,
-        },
-      }).then(response => {
-        console.log(response.data);
-      }).catch(error => {
-        console.error(error);
-      });
-  };
 
   return (
     <div
@@ -111,14 +59,14 @@ function App() {
           showErrorModal && <ErrorModal callback={() => setShowErrorModal(false)} />
         }
       </AnimatePresence>
-        {
-          webAd && <WebAd closeFunc={() => setWebAd(false)}/>
-        }
+      {
+        webAd && <WebAd closeFunc={() => setWebAd(false)} />
+      }
       <Parallax ref={parallax} pages={4}>
 
         <ParallaxLayer offset={0} speed={-0.1}>
           <div className="grid place-items-center h-full relative">
-            <h1 className="text-white font-iosevka font-bold text-[60px]">Want your house to look like this?</h1>
+            <h1 className="text-white font-iosevka font-bold lg:text-[60px]">Want your house to look like this?</h1>
             <motion.div
               animate={{ y: ["-100%", "50%", "-100%"] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
@@ -130,10 +78,9 @@ function App() {
         </ParallaxLayer>
 
         <ParallaxLayer offset={1.25} speed={0.6} className="pt-16">
-          <h1 className="text-white font-iosevka font-bold text-[60px] text-center">From this -----> To THIS!</h1>
-          <div className="border-8 border-blue-300 mx-20 mt-16">
-            <img src={before} className="w-1/2 inline" />
-            <img src={after} className="w-1/2 inline" />
+          {/*         <h1 className="text-white font-iosevka font-bold text-[60px] text-center">From this -----> To THIS!</h1> */}          <div className="border-8 border-blue-300 mx-4 lg:mx-20 mt-16">
+            <img src={before} className="lg:w-1/2 inline" />
+            <img src={after} className="lg:w-1/2 inline" />
           </div>
         </ParallaxLayer>
 
@@ -143,14 +90,10 @@ function App() {
 
         <ParallaxLayer
           offset={3}
-          speed={3}
-          className="z-20 p-20"
+          speed={1.5}
+          className="z-20 p-20 pb-40"
         >
-          <MyContext.Provider
-            value={{ formFirstName, formLastName, formPhone, setFirst, setLast, setPhone, createClient, setFormMessage }}
-          >
-            <ContactPage />
-          </MyContext.Provider>
+          <ContactPage setShowSuccessModal={setShowSuccessModal} setShowErrorModal={setShowErrorModal} />
         </ParallaxLayer>
 
         <ParallaxLayer offset={1} speed={0.8} style={{ opacity: 0.1 }}>
