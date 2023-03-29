@@ -2,20 +2,17 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import NavModal from "./components/NavModal";
-import before from './images/before.webp';
-import after from './images/after.webp';
+import drivewayimg from './images/driveway.jpg';
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import { AiOutlineDown } from 'react-icons/ai';
 import bubblesvg from './images/bubble-blue.svg';
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import SuccessModal from "./components/SuccessModal";
 import ErrorModal from "./components/ErrorModal";
 import WebAd from "./components/WebAd";
 import AboutPage from "./components/AboutPage";
-import MyContext from "./MyContext";
 import ContactPage from "./components/ContactPage";
-import axios from "axios";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCx8_eZBavS6zROqDgv5OrLbd3MPamaqek",
@@ -66,7 +63,10 @@ function App() {
 
         <ParallaxLayer offset={0} speed={-0.1}>
           <div className="grid place-items-center h-full relative">
-            <h1 className="text-white font-iosevka font-bold lg:text-[60px]">Want your house to look like this?</h1>
+            <div className="text-center">
+              <h1 className="text-white font-iosevka font-bold text-2xl lg:text-[60px] mb-20">Your driveway is judging you,</h1>
+              <h1 className="text-white font-iosevka font-bold text-2xl lg:text-[60px]">give it a clean slate!</h1>
+            </div>
             <motion.div
               animate={{ y: ["-100%", "50%", "-100%"] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
@@ -77,10 +77,9 @@ function App() {
           </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={1.25} speed={0.6} className="pt-16">
-          {/*         <h1 className="text-white font-iosevka font-bold text-[60px] text-center">From this -----> To THIS!</h1> */}          <div className="border-8 border-blue-300 mx-4 lg:mx-20 mt-16">
-            <img src={before} className="lg:w-1/2 inline" />
-            <img src={after} className="lg:w-1/2 inline" />
+        <ParallaxLayer offset={1.25} speed={0.6} className="grid place-items-center">
+          <div className="border-8 border-blue-300 w-3/5">
+            <img src={drivewayimg} className="w-full" />
           </div>
         </ParallaxLayer>
 
